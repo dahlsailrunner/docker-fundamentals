@@ -1,0 +1,51 @@
+﻿@using IdentityServer4.Extensions
+@using Microsoft.AspNetCore.Identity
+@using Globomantics.IdentityServer.Identity
+@using Globomantics.IdentityServer.Areas.Identity.Pages.Account.Manage
+@inject SignInManager<CustomUser> SignInManager
+
+@{
+    string name = null;
+    if (!true.Equals(ViewData["signed-out"]))
+    {
+        name = Context.User?.GetDisplayName();
+    }
+}
+
+<div class="nav-page">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <a href="~/" class="navbar-brand">
+            <img src="~/icon.png" class="icon-banner">
+            IdentityServer4
+        </a>
+
+        @if (!string.IsNullOrWhiteSpace(name))
+        {
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                    </div>
+                </li>
+                @{ var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any(); }
+                <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" href="/Identity/Account/Manage">Profile</a></li>
+                <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" href="/Identity/Account/Manage/Email">Email</a></li>
+                <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" href="/Identity/Account/Manage/ChangePassword">Password</a></li>
+                @if (hasExternalLogins)
+                {
+                    <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="/Identity/Account/Manage/ExternalLogins">External logins</a></li>
+                }
+                <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" href="/Identity/Account/Manage/TwoFactorAuthentication">Two-factor authentication</a></li>
+                <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" href="/Identity/Account/Manage/PersonalData">Personal data</a></li>
+            </ul>
+        }
+
+    </nav>
+</div>
+
+
+
+
