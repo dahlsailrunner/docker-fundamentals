@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Globomantics.Core.Authorization;
+using Globomantics.Core.Services;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -75,9 +76,14 @@ namespace Globomantics.Core
                     };
                 });
 
+            services.AddAccessTokenManagement();
+
+            services.AddHttpClient<IApiClient, ApiClient>()
+                .AddUserAccessTokenHandler()
+                .AddResiliencePolicies();
+
             services.AddSingleton<IAuthorizationPolicyProvider, CustomPolicyProvider>();
             services.AddScoped<IAuthorizationHandler, RightRequirementHandler>();
-            //services.AddScoped<IAuthorizationHandler, MfaChallengeRequirementHandler>();
 
             services.AddAuthorization(options =>
             {

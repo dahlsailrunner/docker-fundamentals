@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Globomantics.IdentityServer.Initialization
 {
+    // based on code found here: 
+    // https://github.com/IdentityServer/IdentityServer4.Demo/blob/main/src/IdentityServer4Demo/Config.cs
     public static class InitialConfiguration
     {
         public static void PopulateDatabaseIfEmpty(this IApplicationBuilder app)
@@ -58,60 +60,13 @@ namespace Globomantics.IdentityServer.Initialization
 
         public static IEnumerable<Client> GetClients()
         {
+            
             return new List<Client>
             {
                 new Client
                 {
-                    ClientId = "interactive.public",
-                    ClientName = "Public client with standard token lifetim",
-
-                    RedirectUris = {
-                        "http://localhost:4200/auth-callback",
-                        "http://localhost:4200/silent-refresh.html"
-                    },
-                    PostLogoutRedirectUris = { "http://localhost:4200/logout" },
-
-                    RequireClientSecret = false,
-                    AllowAccessTokensViaBrowser = true,
-                    RequireConsent = true,
-
-                    AllowedCorsOrigins = { "http://localhost:4200" },
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding
-                },
-
-
-                // non-interactive
-                new Client
-                {
-                    ClientId = "m2m",
-                    ClientName = "Machine to machine (client credentials)",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2" }
-                },
-                new Client
-                {
-                    ClientId = "m2m.short",
-                    ClientName = "Machine to machine with short access token lifetime (client credentials)",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = { "api", "api.scope1", "api.scope2", "scope2" },
-                    AccessTokenLifetime = 75 // seconds
-                },
-
-                // interactive
-                new Client
-                {
-                    ClientId = "interactive.confidential",
-                    ClientName = "Interactive client (Code with PKCE)",
+                    ClientId = "globo-core",
+                    ClientName = "Globomantics Core UI (Code with PKCE)",
 
                     RedirectUris = { "https://localhost:44320/signin-oidc" },
                     PostLogoutRedirectUris = { "https://notused" },
@@ -119,79 +74,24 @@ namespace Globomantics.IdentityServer.Initialization
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    AllowedScopes = { "openid", "profile", "glob_profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
+                    AllowedScopes = { "openid", "profile", "glob_profile", "email", "glob_api" },
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding
                 },
                 new Client
                 {
-                    ClientId = "interactive.confidential.short",
-                    ClientName = "Interactive client with short token lifetime (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
+                    ClientId = "globo-swagger",
+                    ClientName = "Swagger UI for the Globomantics API",
+                    RedirectUris = { "https://localhost:44376/oauth2-redirect.html" },
                     PostLogoutRedirectUris = { "https://notused" },
 
-                    ClientSecrets = { new Secret("secret".Sha256()) },
                     RequireConsent = false,
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequirePkce = true,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.ReUse,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-
-                    AccessTokenLifetime = 75
-                },
-
-
-                new Client
-                {
-                    ClientId = "interactive.public.short",
-                    ClientName = "Interactive client with short token lifetime (Code with PKCE)",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    RequireClientSecret = false,
-
+                    AllowedCorsOrigins = new List<string> { "https://localhost:44376" },
                     AllowedGrantTypes = GrantTypes.Code,
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" },
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-
-                    AccessTokenLifetime = 75
-                },
-
-                new Client
-                {
-                    ClientId = "device",
-                    ClientName = "Device Flow Client",
-
-                    AllowedGrantTypes = GrantTypes.DeviceFlow,
+                    RequirePkce = true,
                     RequireClientSecret = false,
-
-                    AllowOfflineAccess = true,
-                    RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    RefreshTokenExpiration = TokenExpiration.Sliding,
-
-                    AllowedScopes = { "openid", "profile", "email", "api", "api.scope1", "api.scope2", "scope2" }
-                },
-                
-                // oidc login only
-                new Client
-                {
-                    ClientId = "login",
-
-                    RedirectUris = { "https://notused" },
-                    PostLogoutRedirectUris = { "https://notused" },
-
-                    AllowedGrantTypes = GrantTypes.Implicit,
-                    AllowedScopes = { "openid", "profile", "email" },
+                    AllowedScopes = { "openid", "profile", "email", "glob_profile", "glob_api"   }
                 }
             };
         }
@@ -210,15 +110,7 @@ namespace Globomantics.IdentityServer.Initialization
         {
             return new List<ApiScope>
             {
-                // backward compat
-                new ApiScope("api"),
-                
-                // more formal
-                new ApiScope("api.scope1"),
-                new ApiScope("api.scope2"),
-                
-                // scope without a resource
-                new ApiScope("scope2")
+                new ApiScope("glob_api"),
             };
         }
 
@@ -226,21 +118,9 @@ namespace Globomantics.IdentityServer.Initialization
         {
             return new List<ApiResource>
             {
-                new ApiResource("api", "Demo API")
+                new ApiResource("glob_api", "Globomantics API")
                 {
-                    ApiSecrets = { new Secret("secret".Sha256()) },
-                    UserClaims = {"MfaEnabled", "CompanyId"},
-                    Scopes = { "api", "api.scope1", "api.scope2" }
-                },
-
-                // PolicyServer demo (audience should match scope)
-                new ApiResource("policyserver.runtime")
-                {
-                    Scopes = { "policyserver.runtime" }
-                },
-                new ApiResource("policyserver.management")
-                {
-                    Scopes = { "policyserver.runtime" }
+                    Scopes = { "glob_api" }
                 }
             };
         }

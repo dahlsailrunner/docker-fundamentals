@@ -1,0 +1,14 @@
+﻿@page
+@model Globomantics.Core.Pages.WeatherModel
+
+<h1>Weather!</h1>
+
+@if (Model.Forecast != null)
+{
+    <ul>
+        @foreach (var day in Model.Forecast)
+        {
+            <li>@day.Date.ToShortDateString() -- @day.Summary -- @day.TemperatureC -- @day.TemperatureF</li>
+        }
+    </ul>
+}
