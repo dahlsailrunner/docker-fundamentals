@@ -32,7 +32,7 @@ namespace Globomantics.Api.Extenstions
                 {
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
-                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", $"Piotr_Demo API {description.GroupName.ToUpperInvariant()}");
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", $"Globomantics API {description.GroupName.ToUpperInvariant()}");
                         options.RoutePrefix = string.Empty;
                     }
                     options.DocumentTitle = "Globomantics API Documentation";

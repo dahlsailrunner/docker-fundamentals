@@ -1,0 +1,35 @@
+﻿@using Globomantics.IdentityServer.Identity
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<CustomUser> SignInManager
+@inject UserManager<CustomUser> UserManager
+
+<div class="sign-in col-md-2">
+    <span class="dvider"></span>
+    <div class="sign">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
+                   aria-haspopup="true" aria-expanded="false">@User.Identity.Name <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new {area = ""})" method="post">
+                            <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        </form>
+                    </li>
+
+                </ul>
+            </li>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login">
+                <img class="sign-in-img" src="/images/avatar.svg" alt="sign-in">
+                Sign-in
+            </a>
+        }
+    </div>
+</div>
