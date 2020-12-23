@@ -20,7 +20,7 @@ namespace Globomantics.Core
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
                         .WriteTo.Console()
-                        .WriteTo.Seq("http://localhost:5341"); ;
+                        .WriteTo.Seq("http://host.docker.internal:5341"); ;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
