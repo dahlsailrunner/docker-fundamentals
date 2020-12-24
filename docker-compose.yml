@@ -1,11 +1,20 @@
 version: '3.7'
 
 services:
+  reverseproxy:
+    build:
+      context: .
+      dockerfile: nginx/nginx.Dockerfile
+    depends_on:
+      - globomantics.identityserver
+    ports:
+      - "44395:443"
+
   globomantics.identityserver: 
     image: ${DOCKER_REGISTRY-}globomanticsidentityserver
     build:
       context: .
-      dockerfile: Globomantics.IdentityServer/Dockerfile  
+      dockerfile: Globomantics.IdentityServer/Dockerfile      
     environment:
       - ASPNETCORE_URLS=http://*:5000
     ports:
