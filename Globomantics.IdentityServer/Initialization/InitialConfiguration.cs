@@ -95,7 +95,7 @@ namespace Globomantics.IdentityServer.Initialization
                 }
             };
         }
-        private static IEnumerable<IdentityResource> GetIdentityResources()
+        public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {

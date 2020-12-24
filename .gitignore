@@ -8,3 +8,5 @@
 *.user
 */.vs
 /packages
+/bin/Debug
+/obj

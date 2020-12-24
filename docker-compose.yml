@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  globomantics.identityserver: 
+    image: ${DOCKER_REGISTRY-}globomanticsidentityserver
+    build:
+      context: .
+      dockerfile: Globomantics.IdentityServer/Dockerfile  
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
+    ports:
+      - "5000:5000"
