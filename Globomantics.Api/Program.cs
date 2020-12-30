@@ -20,7 +20,7 @@ namespace Globomantics.Api
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
                         .WriteTo.Console()
-                        .WriteTo.Seq("http://localhost:5341"); ;
+                        .WriteTo.Seq("http://globoseq:5341"); ;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

@@ -3,23 +3,22 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 COPY nginx/id-local.crt /usr/local/share/ca-certificates/id-local.crt
-COPY nginx/www-local.crt /usr/local/share/ca-certificates/www-local.crt
 RUN update-ca-certificates
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["Globomantics.Core/Globomantics.Core.csproj", "Globomantics.Core/"]
-RUN dotnet restore "Globomantics.Core/Globomantics.Core.csproj"
+COPY ["Globomantics.Api/Globomantics.Api.csproj", "Globomantics.Api/"]
+RUN dotnet restore "Globomantics.Api/Globomantics.Api.csproj"
 COPY . .
-WORKDIR "/src/Globomantics.Core"
-RUN dotnet build "Globomantics.Core.csproj" -c Release -o /app/build
+WORKDIR "/src/Globomantics.Api"
+RUN dotnet build "Globomantics.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Globomantics.Core.csproj" -c Release -o /app/publish
+RUN dotnet publish "Globomantics.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Globomantics.Core.dll"]
+ENTRYPOINT ["dotnet", "Globomantics.Api.dll"]

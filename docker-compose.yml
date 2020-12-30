@@ -38,6 +38,17 @@ services:
     networks:
       - globonet
 
+  globomantics.api: 
+    build:
+      context: .
+      dockerfile: Globomantics.Api/Dockerfile      
+    environment:
+      - ASPNETCORE_URLS=http://*:5006
+    ports:
+      - "5006:5006"
+    networks:
+      - globonet
+
   globoseq:
     image: datalust/seq
     restart: unless-stopped
