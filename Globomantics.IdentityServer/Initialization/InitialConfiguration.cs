@@ -68,7 +68,7 @@ namespace Globomantics.IdentityServer.Initialization
                     ClientId = "globo-core",
                     ClientName = "Globomantics Core UI (Code with PKCE)",
 
-                    RedirectUris = { "https://localhost:44320/signin-oidc" },
+                    RedirectUris = { "https://www-local.globomantics.com:44395/signin-oidc" },
                     PostLogoutRedirectUris = { "https://notused" },
 
                     ClientSecrets = { new Secret("secret".Sha256()) },

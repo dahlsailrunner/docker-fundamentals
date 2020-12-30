@@ -8,7 +8,12 @@ services:
     depends_on:
       - globomantics.identityserver
     ports:
-      - "44395:443"
+      - "44395:44395"
+    networks:
+      globonet:
+        aliases: 
+          - "id-local.globomantics.com"
+          - "www-local.globomantics.com"
 
   globomantics.identityserver: 
     image: ${DOCKER_REGISTRY-}globomanticsidentityserver
@@ -19,3 +24,37 @@ services:
       - ASPNETCORE_URLS=http://*:5000
     ports:
       - "5000:5000"
+    networks:
+      - globonet
+
+  globomantics.ui: 
+    build:
+      context: .
+      dockerfile: Globomantics.Core/Dockerfile      
+    environment:
+      - ASPNETCORE_URLS=http://*:5005
+    ports:
+      - "5005:5005"
+    networks:
+      - globonet
+
+  globoseq:
+    image: datalust/seq
+    restart: unless-stopped
+    ports:
+      - "5342:80"
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - globonet
+
+  globosmtp:
+    image: rnwood/smtp4dev
+    restart: always
+    ports:
+      - "5010:80"
+    networks:
+      - globonet
+
+networks:
+  globonet: {}

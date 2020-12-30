@@ -29,6 +29,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{9940A564
 		nginx\id-local.pfx = nginx\id-local.pfx
 		nginx\nginx.Dockerfile = nginx\nginx.Dockerfile
 		nginx\nginx.local.conf = nginx\nginx.local.conf
+		nginx\www-local.conf = nginx\www-local.conf
+		nginx\www-local.crt = nginx\www-local.crt
+		nginx\www-local.key = nginx\www-local.key
+		nginx\www-local.pfx = nginx\www-local.pfx
 	EndProjectSection
 EndProject
 Global

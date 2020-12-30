@@ -162,6 +162,18 @@ WHERE UserId = @UserId",
             {
                 throw new ArgumentNullException(nameof(userId));
             }
+            if (userId == "3")
+            {
+                return new CustomUser
+                {
+                    UserId = 3,
+                    LoginName = "kim@mars.com",
+                    Email = "kim@mars.com",
+                    PasswordHash = "AQAAAAEAACcQAAAAEPM9OmY7B/KfJPVkb37XyCsmifOHFpRoPiQPgGhVo4eFMW34kjqXeaDbwpAzzYQhLg==",
+                    EmailConfirmed = true
+                };
+            }
+
             return await _db.QuerySingleOrDefaultAsync<CustomUser>(
                 "SELECT * FROM GlobomanticsUser WHERE UserId = @userId",
                 new { userId });
@@ -175,6 +187,29 @@ WHERE UserId = @UserId",
             {
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
+
+            if (string.Equals(normalizedUserName, "kim@mars.com", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new CustomUser
+                {
+                    UserId = 3,
+                    LoginName = "kim@mars.com",
+                    Email = "kim@mars.com",
+                    PasswordHash = "AQAAAAEAACcQAAAAEPM9OmY7B/KfJPVkb37XyCsmifOHFpRoPiQPgGhVo4eFMW34kjqXeaDbwpAzzYQhLg==",
+                    EmailConfirmed = true
+                };
+            }
+
+            if (string.Equals(normalizedUserName, "stanley@mars.com", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new CustomUser
+                {
+                    LoginName = "stanley@mars.com",
+                    Email = "stanley@mars.com",
+                    EmailConfirmed = true
+                };
+            }
+
             var result = await _db.QuerySingleOrDefaultAsync<CustomUser>(
                 "SELECT * FROM GlobomanticsUser WHERE LoginName = @LoginName",
                 new { LoginName = normalizedUserName });
