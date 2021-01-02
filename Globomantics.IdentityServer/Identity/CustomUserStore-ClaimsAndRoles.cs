@@ -15,14 +15,14 @@ namespace Globomantics.IdentityServer.Identity
         public async Task<IList<Claim>> GetClaimsAsync(CustomUser user, CancellationToken cancellationToken)
         {
             var claims = new List<Claim>();
-            //var memberInfo = await _db.QueryFirstOrDefaultAsync<CompanyMember>(
-            //    "SELECT * FROM CompanyMembers WHERE MemberEmail = @LoginName",
-            //    new { user.LoginName });
+            var memberInfo = await _db.QueryFirstOrDefaultAsync<CompanyMember>(
+                "SELECT * FROM CompanyMembers WHERE MemberEmail = @LoginName",
+                new { user.LoginName });
 
-            //if (memberInfo != null)
-            //{
-            //    claims.Add(new Claim("CompanyId", Convert.ToString(memberInfo.CompanyId)));
-            //}
+            if (memberInfo != null)
+            {
+                claims.Add(new Claim("CompanyId", Convert.ToString(memberInfo.CompanyId)));
+            }
 
             claims.Add(user.LoginName == "kim@mars.com"
                 ? new Claim(JwtClaimTypes.Role, "admin")
