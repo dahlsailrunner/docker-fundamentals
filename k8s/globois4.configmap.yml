@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: globo-identity-config
+data:    
+  Email__SmtpServer: globosmtp-service 
+  Email__SenderAddress: notlistening@globomantics.com 
