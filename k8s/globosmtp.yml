@@ -15,6 +15,9 @@ spec:
       containers:
       - name: stmp4dev
         image: rnwood/smtp4dev:latest
+        env:
+          - name: ServerOptions__BasePath
+            value: "/mail"
         ports:
         - containerPort: 80
         - containerPort: 25

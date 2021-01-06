@@ -1,8 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: seq-ingress
+  name: globo-ingress
 spec:
+  tls:
+  - hosts:
+      - id.local.com
+    secretName: idlocal-tls
   rules:
   - host: seq.local.com
     http:
@@ -13,20 +17,17 @@ spec:
           service:
             name: globoseq-service
             port: 
-              number: 80
-  - host: mail.local.com
+              number: 80  
+  - host: id.local.com
     http:
       paths:
       - pathType: Prefix
-        path: /
+        path: /mail/
         backend:
           service:
             name: globomail-service
             port:
               number: 80
-  - host: id.local.com
-    http:
-      paths:
       - pathType: Prefix
         path: /
         backend:
