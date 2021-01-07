@@ -17,4 +17,5 @@ RUN dotnet publish "Globomantics.IdentityServer.csproj" -c Release -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS=http://*:5000
 ENTRYPOINT ["dotnet", "Globomantics.IdentityServer.dll"]
