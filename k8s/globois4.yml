@@ -25,16 +25,16 @@ spec:
             path: /.well-known/openid-configuration
             port: 5000
           initialDelaySeconds: 20
-          timeoutSeconds: 2
-          periodSeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /.well-known/openid-configuration
             port: 5000
           initialDelaySeconds: 20
-          timeoutSeconds: 2
-          periodSeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
           failureThreshold: 3       
         resources:
           limits:
@@ -51,9 +51,8 @@ metadata:
 spec:
   selector:
     app: globomantics-identity  
-  type: NodePort  
+  type: ClusterIP  
   ports:
     - protocol: TCP 
       port: 5000
-      targetPort: 5000
-      nodePort: 31500  
+      targetPort: 5000      
