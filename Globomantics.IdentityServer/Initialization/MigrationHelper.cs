@@ -21,8 +21,8 @@ namespace Globomantics.IdentityServer.Initialization
             catch (Exception)
             {
                 // If the database is not available yet just wait and try again
-                var dbConnection = serviceScope?.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database
-                    .GetConnectionString();
+                var dbConnection = serviceScope?.ServiceProvider
+                    .GetRequiredService<PersistedGrantDbContext>().Database.GetDbConnection().ConnectionString;
                 Log.Information($"Failed performing migrations: {dbConnection}");
 
                 Thread.Sleep(TimeSpan.FromSeconds(15));
