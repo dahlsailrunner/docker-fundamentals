@@ -30,7 +30,8 @@ namespace Globomantics.IdentityServer
                     loggerConfig
                         .ReadFrom.Configuration(ctx.Configuration) // minimum levels defined per project in json files 
                         .Enrich.FromLogContext()
-                        .WriteTo.Console();
+                        .WriteTo.Console()
+                        .WriteTo.Seq("http://globoseq");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

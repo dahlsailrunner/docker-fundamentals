@@ -68,7 +68,7 @@ namespace Globomantics.IdentityServer.Initialization
                     ClientId = "globo-core",
                     ClientName = "Globomantics Core UI (Code with PKCE)",
 
-                    RedirectUris = { "https://localhost:44320/signin-oidc" },
+                    RedirectUris = { "https://www-local.globomantics.com:44395/signin-oidc" },
                     PostLogoutRedirectUris = { "https://notused" },
 
                     ClientSecrets = { new Secret("secret".Sha256()) },
@@ -83,11 +83,11 @@ namespace Globomantics.IdentityServer.Initialization
                 {
                     ClientId = "globo-swagger",
                     ClientName = "Swagger UI for the Globomantics API",
-                    RedirectUris = { "https://localhost:44376/oauth2-redirect.html" },
+                    RedirectUris = { "https://www-local.globomantics.com:44395/api/oauth2-redirect.html" },
                     PostLogoutRedirectUris = { "https://notused" },
 
                     RequireConsent = false,
-                    AllowedCorsOrigins = new List<string> { "https://localhost:44376" },
+                    AllowedCorsOrigins = new List<string> { "https://www-local.globomantics.com:44395" },
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
@@ -95,7 +95,7 @@ namespace Globomantics.IdentityServer.Initialization
                 }
             };
         }
-        private static IEnumerable<IdentityResource> GetIdentityResources()
+        public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {

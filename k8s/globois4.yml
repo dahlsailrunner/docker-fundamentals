@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: globomantics-identity  
+spec:
+  selector:
+    matchLabels:
+      app: globomantics-identity
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: globomantics-identity
+    spec:
+      containers:
+      - name: is4
+        image: dahlsailrunner/globomantics_is4:latest        
+        envFrom:
+          - configMapRef:
+              name: globo-identity-config
+          - secretRef:
+              name: globoconn-secrets 
+        livenessProbe:
+          httpGet:
+            path: /.well-known/openid-configuration
+            port: 5000
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /.well-known/openid-configuration
+            port: 5000
+          initialDelaySeconds: 20
+          timeoutSeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3       
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: globois4-service
+spec:
+  selector:
+    app: globomantics-identity  
+  type: ClusterIP  
+  ports:
+    - protocol: TCP 
+      port: 5000
+      targetPort: 5000      

@@ -1,0 +1,25 @@
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:3.1-buster-slim AS base
+WORKDIR /app
+COPY nginx/id-local.crt /usr/local/share/ca-certificates/id-local.crt
+COPY nginx/www-local.crt /usr/local/share/ca-certificates/www-local.crt
+RUN update-ca-certificates
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:3.1-buster-slim AS build
+WORKDIR /src
+COPY ["Globomantics.Core/Globomantics.Core.csproj", "Globomantics.Core/"]
+RUN dotnet restore "Globomantics.Core/Globomantics.Core.csproj"
+COPY . .
+WORKDIR "/src/Globomantics.Core"
+RUN dotnet build "Globomantics.Core.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Globomantics.Core.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Globomantics.Core.dll"]

@@ -19,7 +19,8 @@ namespace Globomantics.Core
                     loggerConfiguration
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()
-                        .WriteTo.Console();
+                        .WriteTo.Console()
+                        .WriteTo.Seq("http://globoseq"); ;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

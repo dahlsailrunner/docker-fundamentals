@@ -101,6 +101,10 @@ namespace Globomantics.IdentityServer
                     options.UserInteraction.LoginUrl = "/Account/Login";
                     options.UserInteraction.LogoutUrl = "/Account/Logout";
                 })
+                //.AddInMemoryApiResources(InitialConfiguration.GetApis())
+                //.AddInMemoryApiScopes(InitialConfiguration.GetApiScopes())
+                //.AddInMemoryIdentityResources(InitialConfiguration.GetIdentityResources())
+                //.AddInMemoryClients(InitialConfiguration.GetClients())
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b =>

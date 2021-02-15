@@ -1,0 +1,88 @@
+version: '3.7'
+
+services:
+  reverseproxy:
+    build:
+      context: .
+      dockerfile: nginx/nginx.Dockerfile
+    depends_on:
+      - globomantics.identityserver
+    ports:
+      - "44395:44395"
+    networks:
+      globonet:
+        aliases: 
+          - "id-local.globomantics.com"
+          - "www-local.globomantics.com"
+
+  globomantics.identityserver: 
+    image: ${DOCKER_REGISTRY-}globomanticsidentityserver
+    build:
+      context: .
+      dockerfile: Globomantics.IdentityServer/Dockerfile 
+    depends_on:
+      - globosql
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
+    ports:
+      - "5000:5000"
+    networks:
+      - globonet
+
+  globomantics.ui: 
+    build:
+      context: .
+      dockerfile: Globomantics.Core/Dockerfile      
+    environment:
+      - ASPNETCORE_URLS=http://*:5005
+    depends_on:
+      - globosql
+    ports:
+      - "5005:5005"
+    networks:
+      - globonet
+
+  globomantics.api: 
+    build:
+      context: .
+      dockerfile: Globomantics.Api/Dockerfile      
+    environment:
+      - ASPNETCORE_URLS=http://*:5006
+    ports:
+      - "5006:5006"
+    networks:
+      - globonet
+
+  globoseq:
+    image: datalust/seq
+    restart: unless-stopped
+    ports:
+      - "5342:80"
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - globonet
+
+  globosmtp:
+    image: rnwood/smtp4dev
+    restart: always
+    ports:
+      - "5010:80"
+    networks:
+      - globonet
+  
+  globosql:
+    build:
+      context: .
+      dockerfile: sql/sql.Dockerfile
+    restart: always
+    ports:
+      - "1440:1433"   
+    environment:      
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Sqlc0ntainersFTW!
+    networks:
+      - globonet
+
+networks:
+  globonet: {}
